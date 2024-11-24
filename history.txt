@@ -1,0 +1,220 @@
+2024-11-08 20:54:06.967310: Calcula la suma de 2 y 3-> 5
+2024-11-08 20:59:13.083515: Genera una lista del 1 al 10-> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+2024-11-08 20:59:38.371905: Crea una funcion que calcule el factorial de un numero-> He creado una función en Python que calcula el factorial de un número. Aquí está el código:
+
+```python
+def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+# Test the function
+print(factorial(5))  # Expected output: 120
+```
+
+La función `factorial` utiliza recursión para calcular el factorial de un número dado.
+```
+2024-11-24 08:11:48.041943: Genera una lista del 1 al 10.-> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+2024-11-24 09:24:44.464965: Genera una lista del 1 al 10.-> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+2024-11-24 10:17:27.462371: Calcula la suma de 2 y 3.-> La suma de 2 y 3 es 5.
+2024-11-24 10:19:58.852973: Calcula la suma de 2 y 3.-> La suma de 2 y 3 es 5.
+```
+2024-11-24 10:20:07.294225: Genera una lista del 1 al 10.-> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+2024-11-24 10:25:56.322661: Crea una función que calcule el factorial de un número. -> He creado una función que calcula el factorial de un número. Aquí está el código:
+
+```python
+def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+# Ejemplo de uso
+print(factorial(5))  # Salida: 120
+```
+
+Esta función utiliza recursión para calcular el factorial de un número dado.
+2024-11-24 10:26:09.837772: que es el rsa? -> No sé la respuesta.
+2024-11-24 10:27:30.208311: sabes implementar el algortimo RSA? -> No sé la respuesta.
+2024-11-24 10:28:32.968151: que es el algoritmo RSA?
+ -> El algoritmo RSA es un sistema de criptografía de clave pública desarrollado en 1977 por Ron Rivest, Adi Shamir y Leonard Adleman. Es uno de los primeros y más utilizados métodos de cifrado de datos y es ampliamente utilizado para la seguridad en la transmisión de datos. El algoritmo RSA se basa en la dificultad práctica de factorizar el producto de dos números primos grandes, lo cual es conocido como factorización de enteros. En RSA, cada usuario tiene una clave pública, que es un par de números (n, e), y una clave privada, que es otro número (d). La clave pública puede ser conocida por todos y se utiliza para cifrar los mensajes, mientras que la clave privada debe ser mantenida en secreto por el usuario y se utiliza para descifrar los mensajes cifrados.
+2024-11-24 10:44:29.999833: cual es el username de Rachel?
+
+ -> No sé la respuesta.
+2024-11-24 10:46:01.951669: cual es el username de Rachel en el csv?
+
+ -> The username for Rachel in the CSV is "booker12".
+2024-11-24 10:56:16.399899: Genera una lista del 1 al 10. -> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+2024-11-24 11:00:32.827216: cual es el username de Rachel? -> The username of Rachel is "booker12".
+2024-11-24 11:00:52.760076: Que es el RSA? -> RSA (Rivest–Shamir–Adleman) es un algoritmo de criptografía de clave pública que se utiliza para la seguridad en la comunicación de datos. Fue desarrollado en 1977 por Ron Rivest, Adi Shamir y Leonard Adleman. El algoritmo RSA permite la encriptación de mensajes asegurando que solo el destinatario correcto pueda leerlos, mediante el uso de un par de claves: una clave pública, que puede ser compartida con todos, y una clave privada, que debe mantenerse secreta. RSA es ampliamente utilizado para la transmisión segura de datos en internet, incluyendo el uso en protocolos como HTTPS, firmas digitales y sistemas de intercambio de claves.
+2024-11-24 11:03:32.955508: Cual es la implemtantacion del algoritmo RSA? -> El algoritmo RSA es un sistema de criptografía de clave pública que se utiliza para asegurar la comunicación de datos. A continuación, te proporciono una implementación básica del algoritmo RSA en Python:
+
+```python
+import random
+from sympy import isprime, mod_inverse
+
+def generate_prime_candidate(length):
+    # generate random bits
+    p = random.getrandbits(length)
+    # apply a mask to set MSB and LSB to 1
+    p |= (1 << length - 1) | 1
+    return p
+
+def generate_prime_number(length=1024):
+    p = 0
+    # keep generating while the primality test fail
+    while not isprime(p):
+        p = generate_prime_candidate(length)
+    return p
+
+def generate_keypair(p, q):
+    if not (isprime(p) and isprime(q)):
+        raise ValueError('Both numbers must be prime.')
+    elif p == q:
+        raise ValueError('p and q cannot be equal')
+    # n = pq
+    n = p * q
+    # Phi is the totient of n
+    phi = (p-1) * (q-1)
+    # Choose an integer e such that e and phi(n) are coprime
+    e = random.randrange(1, phi)
+    # Use Euclid's Algorithm to verify that e and phi(n) are comprime
+    g = gcd(e, phi)
+    while g != 1:
+        e = random.randrange(1, phi)
+        g = gcd(e, phi)
+    # Use Extended Euclid's Algorithm to generate the private key
+    d = mod_inverse(e, phi)
+    # Return public and private keypair
+    # Public key is (e, n) and private key is (d, n)
+    return ((e, n), (d, n))
+
+def encrypt(pk, plaintext):
+    # Unpack the key into it's components
+    key, n = pk
+    # Convert each letter in the plaintext to numbers based on the character using a^b mod m
+    cipher = [(ord(char) ** key) % n for char in plaintext]
+    # Return the array of bytes
+    return cipher
+
+def decrypt(pk, ciphertext):
+    # Unpack the key into its components
+    key, n = pk
+    # Generate the plaintext based on the ciphertext and key using a^b mod m
+    plain = [chr((char ** key) % n) for char in ciphertext]
+    # Return the array of bytes as a string
+    return ''.join(plain)
+
+# Example usage
+p = generate_prime_number(1024)
+q = generate_prime_number(1024)
+public, private = generate_keypair(p, q)
+message = 'Hello, RSA!'
+encrypted_msg = encrypt(public, message)
+decrypted_msg = decrypt(private, encrypted_msg)
+
+print("Original:", message)
+print("Encrypted:", ''.join(map(lambda x: str(x), encrypted_msg)))
+print("Decrypted:", decrypted_msg)
+```
+
+Este código es solo un ejemplo básico y no debe usarse en producción sin las debidas modificaciones y validaciones, especialmente en lo que respecta a la seguridad y eficiencia.
+2024-11-24 11:14:17.333482: Genera una lista del 1 al 10. -> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+2024-11-24 11:14:32.409893: Crea una función que calcule el factorial de un número. -> He creado una función que calcula el factorial de un número. Aquí está el código:
+
+```python
+def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+# Puedes probar la función con un ejemplo
+print(factorial(5))  # Esto debería imprimir 120
+```
+
+La función `factorial` utiliza recursión para calcular el factorial de un número dado.
+2024-11-24 11:15:23.540362: Cual es el username de Rachel? -> The username for Rachel is 'booker12'.
+2024-11-24 11:16:08.916331: Dame la implementación de un RSA -> La implementación de un algoritmo RSA en Python implica varios pasos, incluyendo la generación de claves, el cifrado y el descifrado. Aquí te proporciono un ejemplo básico de cómo podrías implementar RSA:
+
+```python
+import random
+from sympy import isprime, mod_inverse
+
+def generate_prime_candidate(length):
+    # generate random bits
+    p = random.getrandbits(length)
+    # apply a mask to set MSB and LSB to 1
+    p |= (1 << length - 1) | 1
+    return p
+
+def generate_prime_number(length=1024):
+    p = 4
+    # keep generating while the primality test fail
+    while not isprime(p):
+        p = generate_prime_candidate(length)
+    return p
+
+def generate_keypair(p, q):
+    if not (isprime(p) and isprime(q)):
+        raise ValueError('Both numbers must be prime.')
+    elif p == q:
+        raise ValueError('p and q cannot be equal')
+    # n = pq
+    n = p * q
+
+    # Phi is the totient of n
+    phi = (p-1) * (q-1)
+
+    # Choose an integer e such that e and phi(n) are coprime
+    e = random.randrange(1, phi)
+
+    # Use Euclid's Algorithm to verify that e and phi(n) are comprime
+    g = gcd(e, phi)
+    while g != 1:
+        e = random.randrange(1, phi)
+        g = gcd(e, phi)
+
+    # Use Extended Euclid's Algorithm to generate the private key
+    d = mod_inverse(e, phi)
+    
+    # Return public and private keypair
+    # Public key is (e, n) and private key is (d, n)
+    return ((e, n), (d, n))
+
+def encrypt(pk, plaintext):
+    # Unpack the key into it's components
+    key, n = pk
+    # Convert each letter in the plaintext to numbers based on the character using a^b mod m
+    cipher = [(ord(char) ** key) % n for char in plaintext]
+    # Return the array of bytes
+    return cipher
+
+def decrypt(pk, ciphertext):
+    # Unpack the key into its components
+    key, n = pk
+    # Generate the plaintext based on the ciphertext and key using a^b mod m
+    plain = [chr((char ** key) % n) for char in ciphertext]
+    # Return the array of bytes as a string
+    return ''.join(plain)
+
+# Example usage
+p = generate_prime_number(1024)
+q = generate_prime_number(1024)
+public, private = generate_keypair(p, q)
+message = 'Hello, World!'
+encrypted_msg = encrypt(public, message)
+decrypted_msg = decrypt(private, encrypted_msg)
+
+print("Original:", message)
+print("Encrypted:", ''.join(map(lambda x: str(x), encrypted_msg)))
+print("Decrypted:", decrypted_msg)
+```
+
+Este código es solo un ejemplo básico y no debe usarse en producción sin las debidas modificaciones y pruebas, especialmente en lo que respecta a la seguridad y eficiencia.
